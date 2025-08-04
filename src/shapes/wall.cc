@@ -34,7 +34,6 @@ Point2d Wall::GetNormal(const Ray &ray, const Point2d &p) const {
     n = -1.0 * n;
   }
 
-  std::cout << "[Wall:GetNormal]" << n << '\n';
   return n;
 }
 
@@ -42,7 +41,7 @@ Ray Wall::Interact(const Ray &r, const Point2d &p, const Point2d &n) {
   return material_->Interact(r, p, n);
 }
 
-void Wall::Render(const Image &image) const {
+void Wall::Render(Image &image) const {
   Ray(p_, d_, Colour(1, 1, 1)).Render(image, p_ - d_);
 }
 

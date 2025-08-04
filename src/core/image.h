@@ -24,6 +24,7 @@ class Image {
 
  public:
   double *data_;
+  std::vector<std::unique_ptr<unsigned char[]>> maps_;
   size_t sx_, sy_;
 };
 

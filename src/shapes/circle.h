@@ -17,7 +17,7 @@ class Circle : public Shape {
   std::optional<double> Intersect(const Ray &ray) const override;
   Point2d GetNormal(const Ray &ray, const Point2d &p) const override;
   Ray Interact(const Ray &r, const Point2d &p, const Point2d &n) override;
-  void Render(const Image &image) const override;
+  void Render(Image &image) const override;
 
  private:
   Point2d c_;

@@ -1,5 +1,7 @@
 #include "circle.h"
+#include <algorithm>
 #include <cmath>
+#include <memory>
 #include "core/material.h"
 
 namespace RayTracer2D {
@@ -51,7 +53,11 @@ Ray Circle::Interact(const Ray &r, const Point2d &p, const Point2d &n) {
   return material_->Interact(r, p, n);
 }
 
-void Circle::Render(const Image &image) const {
+void Circle::Render(Image &image) const {
+  const auto sx = image.sx_;
+  const auto sy = image.sy_;
+
+  auto map = std::unique_ptr<unsigned char[]>(new unsigned char[3 * sx * sy]());
   double x, y;
   int xx, yy;
   for (double ang = 0; ang < 2 * M_PI; ang += .001) {
@@ -61,16 +67,17 @@ void Circle::Render(const Image &image) const {
     y -= W_TOP;
     x = x / (W_RIGHT - W_LEFT);
     y = y / (W_BOTTOM - W_TOP);
-    x = x * (image.sx_ - 1);
-    y = y * (image.sy_ - 1);
+    x = x * (sx - 1);
+    y = y * (sy - 1);
     xx = (int)round(x);
     yy = (int)round(y);
-    if (0 <= xx && xx < image.sx_ && 0 <= yy && yy < image.sy_) {
-      image.data_[(xx + (yy * image.sx_)) * 3 + 0] = 0;
-      image.data_[(xx + (yy * image.sx_)) * 3 + 1] = 255;
-      image.data_[(xx + (yy * image.sx_)) * 3 + 2] = 0;
+    if (0 <= xx && xx < sx && 0 <= yy && yy < sy) {
+      map[(xx + (yy * sx)) * 3 + 0] = 0;
+      map[(xx + (yy * sx)) * 3 + 1] = 255;
+      map[(xx + (yy * sx)) * 3 + 2] = 0;
     }
   }
+  image.maps_.push_back(std::move(map));
 }
 
 }  // namespace RayTracer2D

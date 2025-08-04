@@ -27,7 +27,7 @@ class Shape {
   virtual auto Interact(const Ray &r, const Point2d &p, const Point2d &n) -> Ray = 0;
 
   // Render the object on canvas (for debug purpose).
-  virtual void Render(const Image &image) const = 0;
+  virtual void Render(Image &image) const = 0;
 
  protected:
   MaterialPtr material_;

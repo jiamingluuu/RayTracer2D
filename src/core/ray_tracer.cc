@@ -30,9 +30,9 @@ void Main(int argc, char *argv[]) {
   }
 
   rt.image_.AdjustGamma();
-  // for (const auto &shape : *rt.scene_) {
-  //   shape->Render(*rt.image_);
-  // }
+  for (const auto &shape : rt.scene_) {
+    shape->Render(rt.image_);
+  }
   rt.image_.WriteToPPM();
 }
 
@@ -76,22 +76,17 @@ auto parse_args(int argc, char *argv[]) -> Options {
 }
 
 void RayTracer::PropagateRay(Ray ray, const size_t depth) {
-  std::cout << "\n\n## PropagateRay\n";
   for (auto i = 0; i < depth; i++) {
-    std::cout << "depth=" << i << '\n';
     auto result = scene_.FindFirstHit(ray);
     if (!result.has_value()) {
-      std::cout << "[error]\n";
       exit(1);
       return;
     }
     auto [t_hit, hitted_shape] = result.value();
     auto p = ray(t_hit);
-    std::cout << "(ray.p_, p_hit) = " << ray.p_ << ' ' << p << '\n';
     auto n = hitted_shape->GetNormal(ray, p);
     ray.Render(image_, p);
     ray = hitted_shape->Interact(ray, p, n);
-    std::cout << "new ray " << ray << '\n';
   }
 }
 

@@ -34,9 +34,15 @@ void Image::WriteToPPM() {
   }
   auto image_range = image_max - image_min;
   fprintf(stderr, "%f %f %f\n", image_max, image_min, image_range);
-  auto ppm_image = (char *)std::calloc(1, 3 * sx_ * sy_ * sizeof(char));
+  auto ppm_image = new unsigned char[3 * sx_ * sy_]();
   for (auto i = 0; i < 3 * sx_ * sy_; i++) {
-    ppm_image[i] = static_cast<unsigned char>(255.0 * ((data_[i] - image_min) / image_range));
+    ppm_image[i] += static_cast<unsigned char>(255.0 * ((data_[i] - image_min) / image_range));
+  }
+
+  for (const auto &map: maps_) {
+    for (auto i = 0; i < 3 * sx_ * sy_; i++) {
+      ppm_image[i] += map[i];
+    }
   }
 
   std::ofstream ofs("output.ppm", std::ios::binary);

@@ -2,7 +2,6 @@
 #include <cassert>
 
 #include "core/point.h"
-#include "utils/constants.h"
 
 namespace RayTracer2D {
 

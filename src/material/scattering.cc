@@ -9,7 +9,6 @@ Ray ScatteringMaterial::Interact(const Ray &r, const Point2d &p, const Point2d &
   auto c = cos(theta);
   auto s = sin(theta);
   auto d = Point2d(c * n.x - s * n.y, s * n.x + c * n.y).Normalize();
-  std::cout << "[Interact] " << d << '\n';
   return Ray(p, d, r.colour_);
 }
 
